@@ -1,24 +1,32 @@
-/* Starter navbar styles */
+/* Sidebar / Navbar styles */
 .navbar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 220px;
   background: #0f172a;
-  color: #fff;
-  width: 100%;
+  color: var(--foreground);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
 }
 
 .nav-container {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 12px 20px;
+  width: 100%;
+  padding: 24px 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .brand {
   font-weight: 700;
-  color: #fff;
+  color: var(--foreground);
   text-decoration: none;
   font-size: 1.1rem;
 }
@@ -27,7 +35,7 @@
   display: none;
   background: transparent;
   border: 0;
-  color: #fff;
+  color: var(--foreground);
   font-size: 1.25rem;
   cursor: pointer;
 }
@@ -47,28 +55,50 @@
 .nav-list {
   list-style: none;
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
   margin: 0;
   padding: 0;
-  align-items: center;
+  width: 100%;
 }
 
 .nav-item .nav-link {
-  color: #cbd5e1;
+  color: var(--foreground);
   text-decoration: none;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-radius: 6px;
+  display: inline-block;
 }
 
 .nav-item .nav-link:hover,
 .nav-item .nav-link:focus {
   background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  color: var(--foreground);
   outline: none;
 }
 
-/* Mobile styles: show toggle, hide nav by default */
-@media (max-width: 640px) {
+/* Mobile styles: top horizontal navbar */
+@media (max-width: 768px) {
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+  }
+
+  .nav-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+    height: 100%;
+  }
+
   .menu-toggle {
     display: inline-flex;
     align-items: center;
@@ -81,17 +111,22 @@
     gap: 8px;
     position: absolute;
     top: 56px;
-    right: 20px;
+    right: 12px;
     background: #0f172a;
     padding: 12px;
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(2, 6, 23, 0.6);
     min-width: 160px;
-    z-index: 40;
+    z-index: 60;
   }
 
   /* when toggle has aria-expanded="true", show the following nav-list */
   .menu-toggle[aria-expanded="true"] + .nav-list {
     display: flex;
+  }
+
+  /* ensure content offset removed on small screens */
+  #content {
+    margin-left: 0;
   }
 }
