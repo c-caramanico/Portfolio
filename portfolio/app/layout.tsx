@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import "../components/nav.css";
 import React from 'react';
 import IntroController from '../components/IntroController';
+import Stars from '../components/Stars';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body>
+        <Stars />
         <NavBar />
         <div id="content">
           <IntroController>

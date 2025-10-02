@@ -21,8 +21,17 @@ html {
 
 /* add content offset to account for the fixed sidebar on larger screens */
 #content {
-  margin-left: 220px;
+  /* no left offset — content centered across the full viewport; sidebar overlays left edge */
+  margin-left: 0;
   transition: margin-left 200ms ease;
+  display: flex;
+  justify-content: center;
+}
+
+/* ensure the immediate child of #content doesn't stretch full width; cap width */
+#content > * {
+  width: 100%;
+  max-width: 1100px; /* adjust as needed */
 }
 
 @media (max-width: 768px) {

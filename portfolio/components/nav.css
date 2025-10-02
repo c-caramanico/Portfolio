@@ -4,10 +4,10 @@
   left: 0;
   top: 0;
   height: 100vh;
-  width: 220px;
-  background: #0f172a;
+  width: 88px; /* narrower sidebar */
+  background: transparent; /* allow underlying night background to show through */
   color: var(--foreground);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+  box-shadow: none;
   z-index: 50;
   display: flex;
   align-items: flex-start;
@@ -15,20 +15,19 @@
 
 .nav-container {
   width: 100%;
-  padding: 24px 16px;
+  padding: 14px 8px; /* smaller padding */
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center; /* center icons horizontally */
+  justify-content: flex-start;
+  position: relative; /* allow absolute positioning of inner groups */
+  gap: 10px; /* reduce gap */
   height: 100%;
   box-sizing: border-box;
 }
 
 .brand {
-  font-weight: 700;
-  color: var(--foreground);
-  text-decoration: none;
-  font-size: 1.1rem;
+  display: none; /* name removed; keep class but hide */
 }
 
 .menu-toggle {
@@ -60,21 +59,55 @@
   margin: 0;
   padding: 0;
   width: 100%;
+  /* center the icon group exactly in the container */
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
 }
 
 .nav-item .nav-link {
   color: var(--foreground);
   text-decoration: none;
-  padding: 8px 10px;
-  border-radius: 6px;
-  display: inline-block;
+  padding: 6px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* icon sizing */
+.nav-item img {
+  width: 36px;
+  height: 36px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
+}
+
+/* hover: don't fill background — instead add a subtle glow to the icon */
+.nav-item .nav-link:hover img,
+.nav-item .nav-link:focus img {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 10px 26px rgba(30,120,200,0.55));
+  transition: transform 220ms ease, filter 220ms ease;
 }
 
 .nav-item .nav-link:hover,
 .nav-item .nav-link:focus {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--foreground);
   outline: none;
+  transform: translateY(-2px);
+}
+
+/* footer (reset button) pinned to bottom of sidebar) */
+.nav-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  padding: 0 8px;
 }
 
 /* Mobile styles: top horizontal navbar */
@@ -112,7 +145,8 @@
     position: absolute;
     top: 56px;
     right: 12px;
-    background: #0f172a;
+    /* mobile dropdown remains semi-transparent for readability */
+    background: rgba(2, 6, 23, 0.5);
     padding: 12px;
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(2, 6, 23, 0.6);
