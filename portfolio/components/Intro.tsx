@@ -25,16 +25,13 @@ export default function Intro({ onFinish }: Props) {
   // remember the starting position so we can return to it if release without launch
   const initialPos = useRef({ x: 0, y: 0 })
 
-  // place rocket initially in the lower half of the interactive area
+  // place rocket initially centered horizontally with a slight left offset
   useEffect(() => {
     const area = areaRef.current
     if (!area) return
     const rect = area.getBoundingClientRect()
-    // move rocket down from center so it sits in the lower half
-    // translate Y is relative to the centered starting position, so push it by ~1/4 of area height
-    // start the rocket noticeably to the left so a parabola is required to reach the moon on the right
-    // start further left to increase horizontal distance
-    const start = { x: -Math.round(rect.width * 0.35), y: Math.round(rect.height * 0.25) }
+    // start a bit left of center on the same vertical center line
+    const start = { x: -Math.round(rect.width * 0.25), y: 0 }
     initialPos.current = start
     setPos(start)
   }, [])
@@ -176,7 +173,6 @@ export default function Intro({ onFinish }: Props) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        // match the moon asset's navy background exactly so the portal blends seamlessly
         background: '#021227',
         zIndex: 999999,
         transition: 'opacity 360ms ease',
@@ -184,30 +180,31 @@ export default function Intro({ onFinish }: Props) {
         pointerEvents: released ? 'none' : 'auto'
       }}
     >
-      <div style={{ textAlign: 'center', color: 'var(--foreground)', width: '100%', maxWidth: 960, padding: '2rem' }}>
+      <div style={{ textAlign: 'center', color: 'var(--foreground)', width: '100%', padding: '2rem', boxSizing: 'border-box' }}>
         {/* intro visuals only; text removed for a cleaner look */}
 
         <div
           ref={areaRef}
           style={{
-            marginTop: 28,
+            // fully center the interactive area
             height: '60vh',
             minHeight: 320,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            position: 'relative'
+            position: 'relative',
+            width: '100%'
           }}
         >
-          {/* Target (portal) on the right side */}
+          {/* Target (portal) centered vertically, to the right */}
           <div
             ref={targetRef}
             aria-hidden
             style={{
               position: 'absolute',
-              top: '12%',
-              left: '82%',
-              transform: 'translateX(-50%)',
+              top: '50%',
+              left: '75%',
+              transform: 'translate(-50%, -50%)',
               width: 140,
               height: 140,
               borderRadius: 999,
@@ -217,7 +214,7 @@ export default function Intro({ onFinish }: Props) {
               pointerEvents: 'none',
               willChange: 'transform, opacity',
               backfaceVisibility: 'hidden',
-              overflow: 'hidden' // ensure the navy backing shows cleanly
+              overflow: 'hidden'
             }}
           >
             {/* refined moon portal: solid navy backing + inner ring + bluish halo for consistent night look */}
@@ -236,7 +233,6 @@ export default function Intro({ onFinish }: Props) {
                 padding: 6
               }}
             >
-              {/* use the new moon_navy image and keep the portal backing identical to the overlay */}
               <img
                 src="/moon_navy.png"
                 alt="Moon"
@@ -246,7 +242,6 @@ export default function Intro({ onFinish }: Props) {
                   borderRadius: 999,
                   objectFit: 'cover',
                   backgroundColor: '#021227',
-                  // remove blend mode for predictable color since the asset already has the right backing
                   filter: 'drop-shadow(0 12px 36px rgba(30,100,200,0.45))',
                   boxShadow: '0 6px 18px rgba(6,18,40,0.35)',
                   display: 'block'
@@ -268,10 +263,8 @@ export default function Intro({ onFinish }: Props) {
               width: 110,
               height: 110,
               borderRadius: 22,
-              // make the container transparent so the rocket image blends with the page
               background: 'transparent',
               boxShadow: '0 18px 40px rgba(0,0,0,0.65)',
-              // use GPU-accelerated transform and hint the browser
               transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
               transition: dragging.current || launching.current ? 'none' : 'transform 520ms cubic-bezier(.22,1,.36,1)',
               willChange: 'transform',
@@ -292,7 +285,6 @@ export default function Intro({ onFinish }: Props) {
               alt="Rocket"
               aria-hidden
               onError={(e) => {
-                // fallback to a known asset if the Rocket.png fails to load
                 const img = e.currentTarget as HTMLImageElement
                 if (!img.src.endsWith('/file.svg')) {
                   img.src = '/file.svg'
@@ -305,7 +297,6 @@ export default function Intro({ onFinish }: Props) {
                 transform: 'translateY(-4px)',
                 pointerEvents: 'none',
                 willChange: 'transform',
-                // blend white pixels into the background and add a subtle shadow for contrast
                 mixBlendMode: 'multiply',
                 filter: 'drop-shadow(0 14px 36px rgba(2,12,36,0.7))'
               }}
