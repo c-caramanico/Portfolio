@@ -1,7 +1,8 @@
 "use client"
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ProjectsList from '../components/ProjectsList'
+import RocketLaunchIntro from '../components/RocketLaunchIntro'
 import { motion } from "framer-motion"
 
 const projects = [
@@ -13,40 +14,63 @@ const projects = [
 ]
 
 export default function HomePage() {
+  const [showIntro, setShowIntro] = useState(true);
+  const [introComplete, setIntroComplete] = useState(false);
+
+  useEffect(() => {
+    // Check if user has seen intro before
+    const hasSeenIntro = sessionStorage.getItem('hasSeenRocketIntro');
+    if (hasSeenIntro) {
+      setShowIntro(false);
+      setIntroComplete(true);
+    }
+  }, []);
+
+  const handleIntroComplete = () => {
+    sessionStorage.setItem('hasSeenRocketIntro', 'true');
+    setIntroComplete(true);
+  };
+
   return (
     <div className="relative overflow-hidden">
+      {/* Rocket Launch Intro */}
+      {showIntro && <RocketLaunchIntro onComplete={handleIntroComplete} />}
+
       {/* Main content */}
       <div className="relative z-10" style={{ fontFamily: "var(--font-sans)", color: 'var(--foreground)' }}>
-        {/* Home section */}
+        {/* Home section - title always visible, will overlap with intro during transition */}
         <section id="home" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 1.5rem', textAlign: 'center' }}>
           <div>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              viewport={{ once: true }}
-              style={{ fontSize: '3.5rem', margin: 0, fontWeight: 700, letterSpacing: '-0.02em' }}
+            <h1
+              style={{ 
+                fontSize: '3.5rem', 
+                margin: 0, 
+                fontWeight: 700, 
+                letterSpacing: '-0.02em',
+                opacity: 1
+              }}
             >
               Christian Caramanico
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-              viewport={{ once: true }}
-              style={{ marginTop: '0.6rem', fontSize: '1.125rem', fontWeight: 300, opacity: 0.9 }}
+            </h1>
+            <p
+              style={{ 
+                marginTop: '0.6rem', 
+                fontSize: '1.125rem', 
+                fontWeight: 300, 
+                opacity: 0.9
+              }}
             >
               Engineer
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
-              viewport={{ once: true }}
-              style={{ marginTop: 20 }}
+            </p>
+            <p
+              style={{ 
+                marginTop: 20,
+                opacity: introComplete ? 1 : 0,
+                transition: 'opacity 0.8s ease-out'
+              }}
             >
               <a href="#projects" style={{ color: 'var(--foreground)', textDecoration: 'underline' }}>View projects</a>
-            </motion.p>
+            </p>
           </div>
         </section>
 

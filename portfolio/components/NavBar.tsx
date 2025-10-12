@@ -66,15 +66,10 @@ export default function NavBar() {
 
   function resetIntro() {
     try {
-      localStorage.removeItem('seenIntro')
+      sessionStorage.removeItem('hasSeenRocketIntro')
     } catch (e) {}
-    // notify listeners (IntroController) to show the intro
-    try {
-      // use a plain Event instead of CustomEvent for broader compatibility
-      const evt = new Event('intro-reset')
-      window.dispatchEvent(evt)
-    } catch (e) {}
-    setOpen(false)
+    // Reload the page to show the intro again
+    window.location.reload()
   }
 
   return (

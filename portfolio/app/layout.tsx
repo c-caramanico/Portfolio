@@ -5,7 +5,6 @@ import NavBar from "../components/NavBar";
 import "../components/nav.css";
 import React from 'react';
 import Stars from '../components/Stars';
-import ScrollRevealIntro from '../components/ScrollRevealIntro';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +31,6 @@ export default function RootLayout({ children }: Props) {
       <body>
         <Stars />
         <NavBar />
-        <ScrollRevealIntro />
         <div id="content">
           {children}
         </div>
